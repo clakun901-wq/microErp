@@ -1,5 +1,5 @@
-const V = 'micro-erp-0.2.1';
-const SHELL = ['./', 'index.html', 'manifest.json', 'css/app.css', 'icons/icon.svg', 'js/main.js', 'js/store.js', 'js/config.js', 'js/ui/views.js', 'js/worker/inventory.js', 'js/worker/orders.js', 'js/worker/finance.js',
+const V = 'micro-erp-0.3.0';
+const SHELL = ['./', 'index.html', 'manifest.json', 'css/app.css', 'icons/icon.svg', 'js/main.js', 'js/store.js', 'js/config.js', 'js/ui/kit.js', 'js/ui/views.js', 'js/worker/inventory.js', 'js/worker/orders.js', 'js/worker/finance.js',
   'js/core/money.js', 'js/components/virtual-list.js', 'js/components/product-card.js',
   'js/worker/worker.js', 'js/worker/db.js', 'js/worker/pricing.js'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(V).then(c => c.addAll(SHELL))); self.skipWaiting(); });

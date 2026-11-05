@@ -21,7 +21,8 @@ export async function open() {
   db = new pool.OpfsSAHPoolDb('/erp.db');
   db.exec(`CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, sku TEXT, name TEXT,
              cost INTEGER, stock INTEGER, margin_bp INTEGER, plat INTEGER);`);
-  if (db.selectValue('PRAGMA user_version') < 2) {
+  const ver = db.selectValue('PRAGMA user_version');
+  if (ver < 2) {
     for (const c of ["category TEXT DEFAULT ''", 'weight_g INTEGER DEFAULT 0', "dim_cm TEXT DEFAULT ''",
                      'reorder INTEGER DEFAULT 10', 'reserved INTEGER DEFAULT 0'])
       try { db.exec('ALTER TABLE products ADD COLUMN ' + c); } catch { /* kolom sudah ada */ }
@@ -40,6 +41,19 @@ export async function open() {
       ${SYNC('orders', ['id', 'channel', 'status'])}
       PRAGMA user_version=2;`);
   }
+  if (ver < 3) db.exec(`CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT); PRAGMA user_version=3;`);
+}
+export const getMeta = k => db.selectValue('SELECT v FROM meta WHERE k=?', [k]);
+export const setMeta = (k, v) => db.exec({ sql: 'INSERT OR REPLACE INTO meta VALUES(?,?)', bind: [k, v] });
+
+// Hapus semua data (hanya atas perintah pengguna): lepas penjaga append-only, kosongkan, pasang lagi.
+export function resetAll() {
+  tx(() => {
+    for (const t of ['stock_moves', 'ledger']) db.exec(`DROP TRIGGER IF EXISTS im_u_${t}; DROP TRIGGER IF EXISTS im_d_${t};`);
+    for (const t of ['stock_moves', 'ledger', 'orders', 'order_items', 'sync_queue', 'products', 'purchase_orders', 'po_items', 'suppliers', 'meta'])
+      db.exec('DELETE FROM ' + t);
+    db.exec('DELETE FROM sqlite_sequence;' + IMMUTABLE('stock_moves') + IMMUTABLE('ledger'));
+  });
 }
 
 export const loadAll = () => all(`SELECT id,sku,name,category,weight_g AS weight,reorder,reserved,cost,stock,

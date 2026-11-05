@@ -10,23 +10,28 @@
 <link rel="stylesheet" href="css/app.css">
 </head>
 <body>
-<header>
-  <b id="brand"></b>
-  <nav><button data-v="produk">Produk</button><button data-v="pesanan">Pesanan</button><button data-v="dasbor">Dasbor</button></nav>
-  <span id="status"></span>
-</header>
-<div id="bar">
-  <input id="q" type="search" placeholder="Cari nama / SKU…" autocomplete="off">
-  <label><input id="low" type="checkbox"> Perlu restok</label>
-  <select id="channel"><option>Shopee</option><option>Tokopedia</option><option>TikTok Shop</option><option>Manual</option></select>
-  <span id="count"></span>
-  <button id="backup">Cadangkan</button>
-</div>
+<header><b id="brand"></b><span id="status"></span><button id="gear" class="ghost" aria-label="Pengaturan">⚙ Pengaturan</button></header>
+<div id="banner" hidden><span>Anda memakai <b>data contoh</b>.</span><button id="clearDemo" class="ghost">Hapus data contoh</button></div>
 <main>
-  <section id="v-produk"><virtual-list></virtual-list></section>
+  <section id="v-welcome" hidden></section>
+  <section id="v-beranda"></section>
+  <section id="v-stok" hidden>
+    <div id="bar">
+      <input id="q" type="search" placeholder="Cari produk atau SKU…" autocomplete="off">
+      <button id="add">+ Produk</button>
+      <label><input id="low" type="checkbox"> Hanya yang hampir habis</label>
+      <span id="count"></span>
+    </div>
+    <div id="listwrap"><virtual-list></virtual-list></div>
+  </section>
   <section id="v-pesanan" hidden></section>
-  <section id="v-dasbor" hidden></section>
+  <section id="v-keuangan" hidden></section>
 </main>
+<nav id="tabs">
+  <button data-v="beranda">🏠<span>Beranda</span></button><button data-v="stok">📦<span>Stok</span></button>
+  <button data-v="pesanan">🧾<span>Pesanan</span></button><button data-v="keuangan">💰<span>Keuangan</span></button>
+</nav>
+<div id="toast" role="status"></div>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@ import { effect } from 'https://cdn.jsdelivr.net/npm/@preact/signals-core@1.8.0/
 import { total, query, version, rpc } from '../store.js';
 import './product-card.js';
 
-const ROW = 140, BUF = 3;
+const ROW = 96, BUF = 3;
 const sheet = new CSSStyleSheet();
 sheet.replaceSync(`:host{display:block;overflow:auto;contain:strict}
 .sp{position:relative;width:100%}
