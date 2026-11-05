@@ -2,7 +2,9 @@ import { signal } from 'https://cdn.jsdelivr.net/npm/@preact/signals-core@1.8.0/
 
 export const total = signal(0);
 export const query = signal('');
-export const version = signal(0); // naik setiap data berubah → daftar dimuat ulang
+export const low = signal(false);
+export const view = signal('produk');   // produk | pesanan | dasbor
+export const version = signal(0);       // naik tiap data berubah → semua tampilan memuat ulang
 export const status = signal('Memuat database…');
 
 const worker = new Worker(new URL('./worker/worker.js', import.meta.url), { type: 'module' });
@@ -17,5 +19,9 @@ export async function init() {
   try { total.value = await rpc('init'); status.value = ''; }
   catch (e) { status.value = 'Gagal: ' + e.message; }
 }
-export async function search(q) { query.value = q; total.value = await rpc('query', { q }); }
-export async function update(p) { await rpc('update', p); version.value++; }
+const refresh = async () => { total.value = await rpc('query', { q: query.value, low: low.value }); };
+export async function search(q, l = low.value) { query.value = q; low.value = l; await refresh(); }
+export async function act(type, p) {
+  try { await rpc(type, p); await refresh(); version.value++; status.value = ''; }
+  catch (e) { status.value = e.message; }
+}

@@ -11,12 +11,22 @@
 </head>
 <body>
 <header>
-  <input id="q" type="search" placeholder="Cari nama / SKU…" autocomplete="off">
-  <span id="count">0 produk</span>
-  <button id="backup">Cadangkan</button>
+  <b id="brand"></b>
+  <nav><button data-v="produk">Produk</button><button data-v="pesanan">Pesanan</button><button data-v="dasbor">Dasbor</button></nav>
   <span id="status"></span>
 </header>
-<main><virtual-list></virtual-list></main>
+<div id="bar">
+  <input id="q" type="search" placeholder="Cari nama / SKU…" autocomplete="off">
+  <label><input id="low" type="checkbox"> Perlu restok</label>
+  <select id="channel"><option>Shopee</option><option>Tokopedia</option><option>TikTok Shop</option><option>Manual</option></select>
+  <span id="count"></span>
+  <button id="backup">Cadangkan</button>
+</div>
+<main>
+  <section id="v-produk"><virtual-list></virtual-list></section>
+  <section id="v-pesanan" hidden></section>
+  <section id="v-dasbor" hidden></section>
+</main>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -46,3 +46,8 @@ export function buildPipeline() {
       .setNext(new Fees()).setNext(new Profit());
   return head;
 }
+
+export const CHANNELS = {
+  'Shopee': PLATFORMS[0], 'Tokopedia': PLATFORMS[1], 'TikTok Shop': PLATFORMS[2],
+  'Manual': { name: 'Manual', feeBp: 0, payBp: 0, fixed: 0 },
+};
